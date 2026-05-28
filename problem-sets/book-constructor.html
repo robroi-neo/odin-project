@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Book(title, author, pages, is_read){
+            if (!new.target){
+                throw Error("You must use the 'new' operator to call this function");
+            }
+
+            this.title = title;
+            this.author = author;
+            this.pages = pages;
+            this.is_read = is_read;
+
+            this.info = () => 
+                `${this.title} by ${this.author}, ${this.pages}, ${this.is_read}`;
+            
+        }
+
+        const book = new Book("The Hobbit", "Tolkein", 265, "Has Not Read");
+
+        console.log(book.info());
+
+    </script>
+</body>
+</html>
