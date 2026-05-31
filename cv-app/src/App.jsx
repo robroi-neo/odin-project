@@ -1,6 +1,8 @@
 import { useState } from "react";
 import GeneralInputForm from "./components/GeneralInputForm";
 import GeneralInfoPreview from "./components/GeneralInfoPreview";
+import EducationInfoPreview from "./components/EducationInfoPreview";
+import EducationInputForm from "./components/EducationInputForm";
 
 function App() {
   const [generalInfo, setGeneralInfo] = useState({
@@ -13,22 +15,32 @@ function App() {
     linkedIn: "https://www.linkedin.com/in/robroi-neo-dingal/",
   });
 
+  const [educationInfo, setEducationInfo] = useState([
+    {
+    university: "University of Mindanao - Main",
+    course: "Bachelor of Science in Computer Science (Ongoing)",
+    honors: "Academic Honors Recipient (3 Semesters) — GWA 3.5+, no grade below 3.0",
+    address: "Davao City, Philippines",
+    date: "August 2023–August 2027",
+   },
+  ])
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Input Fields */}
-        <section className="bg-white rounded-xl shadow-md p-6 space-y-4">
+        <section className="bg-white rounded-xl shadow-md p-6 space-y-4 sticky top-6 max-h-screen overflow-y-auto">
           <h2 className="text-2xl font-bold mb-6">Resume Builder</h2>
 
           <GeneralInputForm 
             generalInfo = {generalInfo}
             setGeneralInfo = {setGeneralInfo}
           />
-
-          <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-            <h3 className="font-semibold">Education</h3>
-          </div>
+          <EducationInputForm 
+            educationInfo = {educationInfo}
+            setEducationInfo = {setEducationInfo}
+          />
 
           <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
             <h3 className="font-semibold">Skills</h3>
@@ -50,15 +62,16 @@ function App() {
         </section>
 
         {/* Resume Preview */}
-        <section className="lg:col-span-2 bg-white rounded-xl shadow-md p-8 min-h-[800px]">
+        <section className="lg:col-span-2 bg-white rounded-xl shadow-md p-8 sticky top-6 max-h-screen overflow-y-auto">
           <h2 className="text-2xl font-bold mb-6">Resume Preview</h2>
-          <div className="pt-5 border-2 border-dashed border-gray-300 rounded-lg h-full flex justify-center">
-            <GeneralInfoPreview 
-              generalInfo = {generalInfo}
-            />
+
+          <div className="flex justify-center">
+            {/* These numbers are there to emulate A4 Size */}
+            <div className="w-[794px] min-h-[1123px] bg-white shadow-lg p-10 print:shadow-none print:border-none">
+              <GeneralInfoPreview generalInfo={generalInfo} />
+              <EducationInfoPreview educationInfo={educationInfo} />
+            </div>
           </div>
-
-
         </section>
 
       </div>
