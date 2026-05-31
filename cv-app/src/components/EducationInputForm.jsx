@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 function EducationInputForm({ educationInfo, setEducationInfo }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [draftEducation, setDraftEducation] = useState(educationInfo);
 
   useEffect(() => {

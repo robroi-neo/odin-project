@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function GeneralInputForm({generalInfo, setGeneralInfo }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [formData, setFormData] = useState({
     name: generalInfo.name,
     city: generalInfo.city,

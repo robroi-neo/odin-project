@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 function SkillsInputForm({ skillsInfo, setSkillsInfo }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const [formData, setFormData] = useState({
     technicalSkills: [],

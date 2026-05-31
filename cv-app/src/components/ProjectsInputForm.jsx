@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function ProjectsInputForm({ projectsInfo, setProjectsInfo }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const handleChange = (index, e) => {
     const updated = projectsInfo.map((entry, i) =>
