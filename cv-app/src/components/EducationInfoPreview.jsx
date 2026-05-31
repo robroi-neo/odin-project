@@ -1,8 +1,8 @@
 function EducationInfoPreview({ educationInfo }) {
   return (
-    <div className="py-4 max-w-2xl w-full">
+    <div className="pb-4 max-w-2xl w-full">
       <h2 className="font-bold mb-1">Education</h2>
-      <hr className="border-t border-gray-300 mb-4" />
+      <hr className="border-t border-gray-800 mb-4" />
 
       {educationInfo.map((entry, index) => (
         <div key={index} className="mb-4">
