@@ -1,4 +1,5 @@
 // a function to generateGameBoard
+// this object detects how the board should be played.
 function generateGameBoard(){
     const rows = 3;
     const cols = 3;
@@ -32,7 +33,97 @@ function generateGameBoard(){
         console.log(board);
     }
 
-    return {getBoard, markCell, printBoard }
+    const checkWin = (size=3) => {
+        // Returns "X" or "O" if there is a winner; otherwise returns null.
+
+        // check rows
+        // i have to iterate each row 
+        const player = board[row][0];
+        for (let row = 0; row < size; row++) {
+            // get the first element of that row
+
+            // if the first element of that row is null
+            // then skip early
+            if (player === null) continue;
+
+            let won = true;
+
+            // iterate per col
+            for (let col = 1; col < size; col++) {
+                if (board[row][col] !== player) {
+                    // not a winning row
+                    won = false;
+                    break;
+                }
+            }
+            if (won) {
+                return player;
+            }
+        }
+
+        const player = board[0][col];
+        // check column
+        for (let col = 0; col < size; col++) {
+            // get the first element of that row
+
+            // if the first element of that row is null
+            // then skip early
+            if (player === null) continue;
+
+            let won = true;
+
+            // iterate per col
+            for (let row = 1; row < size; row++) {
+                if (board[col][row] !== player) {
+                    // not a winning row
+                    won = false;
+                    break;
+                }
+            }
+            if (won) {
+                return player;
+            }
+        }
+
+        // Check main diagonal
+        let player = board[0][0];
+        if (player !== null) {
+            let won = true;
+
+            for (let i = 1; i < size; i++) {
+                if (board[i][i] !== player) {
+                    won = false;
+                    break;
+                }
+            }
+
+            if (won) {
+                return player;
+            }
+        }
+
+        // Check other diagonal
+        player = board[0][size - 1];
+        if (player !== null) {
+            let won = true;
+
+            for (let i = 1; i < size; i++) {
+                if (board[i][size - 1 - i] !== player) {
+                    won = false;
+                    break;
+                }
+            }
+
+            if (won) {
+                return player;
+            }
+        }
+
+        // No winner
+        return null;
+    }
+
+    return {getBoard, markCell, printBoard, checkWin }
 }
 
 // a player factory
@@ -43,6 +134,7 @@ function makePlayer(name, mark){
 }
 
 // controls the game flow
+// this is the game logic itself
 function GameController(
     playerOne = makePlayer("Robroi","X"),
     playerTwo = makePlayer("Emy", "o")
