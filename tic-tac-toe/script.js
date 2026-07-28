@@ -1,0 +1,111 @@
+// a function to generateGameBoard
+function generateGameBoard(){
+    const rows = 3;
+    const cols = 3;
+    // create a 3x3 array.
+    const board = Array(rows).fill().map(() => Array(cols).fill(null));
+
+    const getBoard = () => board;
+
+    // a function to mark a cell in the 3x3 grid
+    const markCell = (x,y, mark) => {
+
+        // add check if x > row and y > cols
+        if (x < 0 || x >= rows || y < 0 || y >= cols) {
+        console.log("Invalid index");
+        return;
+        }
+
+        // add check if index is already occupied.
+        if (board[x][y] !== null) {
+        console.log("Can't do shit here mate.");
+        return;
+        }
+
+        // push the number to the specified index
+        board[x][y] = mark;
+
+        return true;
+    }
+
+    const printBoard = () => {
+        console.log(board);
+    }
+
+    return {getBoard, markCell, printBoard }
+}
+
+// a player factory
+function makePlayer(name, mark){
+    // returns a player object 
+    const username = ("@" + name).toLowerCase();
+    return {username, mark};
+}
+
+// controls the game flow
+function GameController(
+    playerOne = makePlayer("Robroi","X"),
+    playerTwo = makePlayer("Emy", "o")
+){
+    const board = generateGameBoard();
+
+    const players = [
+        {
+            name: playerOne.username,
+            mark: playerOne.mark,
+        },
+        {
+            name: playerTwo.username,
+            mark: playerTwo.mark,
+        },
+    ];
+
+    let activePlayer = players[0];
+
+    const switchPlayerTurn = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    };
+
+    const getActivePlayer = () => activePlayer;
+
+    const printNewRound = () => {
+        board.printBoard();
+        console.log(`${getActivePlayer().name}'s turn.`);
+
+    };
+
+    const playRound = (x,y) => {
+        const success = board.markCell(x,y, getActivePlayer().mark);
+        
+        if (!success){
+            console.log("invalid move, try again");
+            return
+        }
+        // happy path
+        console.log(
+            `${getActivePlayer().name}'s marking at index [${x},${y}]`
+        );
+        switchPlayerTurn();
+        printNewRound();
+    };
+
+    printNewRound();
+
+    return{
+        playRound,
+        getActivePlayer,
+    };
+}
+
+function startGame() {
+  const game = GameController();
+
+  while (true) {
+    const x = Number(prompt("Enter row (0-2):"));
+    const y = Number(prompt("Enter column (0-2):"));
+
+    game.playRound(x, y);
+  }
+}
+
+startGame();
