@@ -124,7 +124,20 @@ function generateGameBoard(){
         return null;
     }
 
-    return {getBoard, markCell, printBoard, checkWin }
+    const checkDraw = (size=3) => {
+        // check draw, basically check if every index in the array is not null
+        for (let i = 0; i < size;i++){
+            // draw default
+            for (let j = 0; j < size; j++){
+                if (board[i][j] === null){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    return {getBoard, markCell, printBoard, checkWin, checkDraw}
 }
 
 // a player factory
@@ -174,19 +187,25 @@ function GameController(
             console.log("invalid move, try again");
             return;
         }
-        // happy path
+        // happy path here
         console.log(
             `${getActivePlayer().name}'s marking at index [${x},${y}]`
         );
 
+        // check if win
         const winner = board.checkWin();
-
-        if (winner) {
+        if (winner !== null) {
             const winnerPlayer = players.find(player => player.mark === winner);
             console.log(`${winnerPlayer.name} wins!`);
             return;
+        } 
+        // check if draw
+        if (board.checkDraw()){
+            console.log('its a tie!');
+            return;
         }
 
+        // continue playing
         switchPlayerTurn();
         printNewRound();
     };
