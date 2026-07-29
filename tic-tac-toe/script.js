@@ -38,8 +38,8 @@ function generateGameBoard(){
 
         // check rows
         // i have to iterate each row 
-        const player = board[row][0];
         for (let row = 0; row < size; row++) {
+            let player = board[row][0];
             // get the first element of that row
 
             // if the first element of that row is null
@@ -61,9 +61,9 @@ function generateGameBoard(){
             }
         }
 
-        const player = board[0][col];
         // check column
         for (let col = 0; col < size; col++) {
+            player = board[0][col];
             // get the first element of that row
 
             // if the first element of that row is null
@@ -86,7 +86,7 @@ function generateGameBoard(){
         }
 
         // Check main diagonal
-        let player = board[0][0];
+        player = board[0][0];
         if (player !== null) {
             let won = true;
 
@@ -107,6 +107,7 @@ function generateGameBoard(){
         if (player !== null) {
             let won = true;
 
+            // start at the second row after board[0][size - 1];
             for (let i = 1; i < size; i++) {
                 if (board[i][size - 1 - i] !== player) {
                     won = false;
@@ -171,12 +172,21 @@ function GameController(
         
         if (!success){
             console.log("invalid move, try again");
-            return
+            return;
         }
         // happy path
         console.log(
             `${getActivePlayer().name}'s marking at index [${x},${y}]`
         );
+
+        const winner = board.checkWin();
+
+        if (winner) {
+            const winnerPlayer = players.find(player => player.mark === winner);
+            console.log(`${winnerPlayer.name} wins!`);
+            return;
+        }
+
         switchPlayerTurn();
         printNewRound();
     };
@@ -190,14 +200,14 @@ function GameController(
 }
 
 function startGame() {
-  const game = GameController();
+    console.log("game start!");
+    const game = GameController();
+    while (true) {
+        const x = Number(prompt("Enter row (0-2):"));
+        const y = Number(prompt("Enter column (0-2):"));
 
-  while (true) {
-    const x = Number(prompt("Enter row (0-2):"));
-    const y = Number(prompt("Enter column (0-2):"));
-
-    game.playRound(x, y);
-  }
+        game.playRound(x, y);
+    }
 }
 
 startGame();
