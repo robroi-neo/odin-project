@@ -19,8 +19,7 @@ function generateGameBoard(){
 
         // add check if index is already occupied.
         if (board[x][y] !== null) {
-        console.log("Can't do shit here mate.");
-        return;
+            return;
         }
 
         // push the number to the specified index
@@ -257,15 +256,38 @@ function RenderUI(game) {
                 // add an event listener for each cell to listen if its being clicked
                 cell.addEventListener("click", () => {
                     // tell the controller a move was made
-                    game.playRound(event.target.dataset.row, event.target.dataset.col);
+                    const result = game.playRound(event.target.dataset.row, event.target.dataset.col);
+                    
                     // rerender the board
                     renderBoard();
+                    
+                    switch (result.status) {
+                        case "winner":
+                            // Update turn text
+                            // Disable further clicks
+                            break;
+
+                        case "draw":
+                            // Show "It's a draw!"
+                            break;
+
+                        case "invalid":
+                            // Maybe do nothing or show a message
+                            break;
+
+                        case "continue":
+                            // Update the turn indicator
+                            break;
+                    }
+                    
                 });
                 boardElement.appendChild(cell);
             }
         }
     }
 
+
+    
     renderBoard();
 }
 
