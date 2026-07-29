@@ -155,6 +155,8 @@ function GameController(
 ){
     const board = generateGameBoard();
 
+    const getBoard = () => board.getBoard();
+
     const players = [
         {
             name: playerOne.username,
@@ -185,7 +187,9 @@ function GameController(
         
         if (!success){
             console.log("invalid move, try again");
-            return;
+            return {
+                status: "invalid",
+            }
         }
         // happy path here
         console.log(
@@ -197,36 +201,77 @@ function GameController(
         if (winner !== null) {
             const winnerPlayer = players.find(player => player.mark === winner);
             console.log(`${winnerPlayer.name} wins!`);
-            return;
+            return {
+                status: "winner",
+                winner: winnerPlayer,
+            }
         } 
         // check if draw
         if (board.checkDraw()){
             console.log('its a tie!');
-            return;
+            return {
+                status: "draw",
+            }
         }
 
         // continue playing
         switchPlayerTurn();
         printNewRound();
+        return {
+            status: "continue",
+            activePlayer: getActivePlayer(),
+        }
     };
 
     printNewRound();
 
     return{
+        getBoard,
         playRound,
         getActivePlayer,
     };
 }
 
-function startGame() {
-    console.log("game start!");
-    const game = GameController();
-    while (true) {
-        const x = Number(prompt("Enter row (0-2):"));
-        const y = Number(prompt("Enter column (0-2):"));
+function RenderUI(game) {
+    const boardElement = document.querySelector(".board");
 
-        game.playRound(x, y);
+    const renderBoard = () => {
+        // clear board element
+        boardElement.innerHTML = "";
+
+        // get the board object
+        const boardState = game.getBoard();
+        // render that board
+        for (let row = 0; row < boardState.length; row++) {
+            for (let col = 0; col < boardState[row].length; col++) {
+
+                const cell = document.createElement("div");
+
+                cell.classList.add("board__cell");
+
+                cell.textContent = boardState[row][col] ?? "";
+
+                cell.dataset.row = row;
+                cell.dataset.col = col;
+
+                // add an event listener for each cell to listen if its being clicked
+                cell.addEventListener("click", () => {
+                    // tell the controller a move was made
+                    game.playRound(event.target.dataset.row, event.target.dataset.col);
+                    // rerender the board
+                    renderBoard();
+                });
+                boardElement.appendChild(cell);
+            }
+        }
     }
+
+    renderBoard();
+}
+
+function startGame() {
+    const game = GameController();
+    RenderUI(game);
 }
 
 startGame();
