@@ -73,7 +73,7 @@ function generateGameBoard(){
 
             // iterate per col
             for (let row = 1; row < size; row++) {
-                if (board[col][row] !== player) {
+                if (board[row][col] !== player) {
                     // not a winning row
                     won = false;
                     break;
@@ -136,7 +136,15 @@ function generateGameBoard(){
         return true;
     }
 
-    return {getBoard, markCell, printBoard, checkWin, checkDraw}
+    const clear = () => {
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            board[row][col] = null;
+        }
+    }
+};
+
+    return {getBoard, markCell, printBoard, checkWin, checkDraw, clear}
 }
 
 // a player factory
@@ -150,7 +158,7 @@ function makePlayer(name, mark){
 // this is the game logic itself
 function GameController(
     playerOne = makePlayer("Robroi","X"),
-    playerTwo = makePlayer("Emy", "o")
+    playerTwo = makePlayer("Emy", "O")
 ){
     const board = generateGameBoard();
 
@@ -166,6 +174,16 @@ function GameController(
             mark: playerTwo.mark,
         },
     ];
+
+    const getPlayers = () => [...players];
+
+    const scores = {
+        [players[0].name]: 0,
+        [players[1].name]: 0,
+        ties: 0,
+        };
+
+    const getScores = () => ({...scores});
 
     let activePlayer = players[0];
 
@@ -199,6 +217,7 @@ function GameController(
         const winner = board.checkWin();
         if (winner !== null) {
             const winnerPlayer = players.find(player => player.mark === winner);
+            scores[winnerPlayer.name]++
             console.log(`${winnerPlayer.name} wins!`);
             return {
                 status: "winner",
@@ -207,6 +226,7 @@ function GameController(
         } 
         // check if draw
         if (board.checkDraw()){
+            scores.ties++;
             console.log('its a tie!');
             return {
                 status: "draw",
@@ -222,17 +242,28 @@ function GameController(
         }
     };
 
+    const resetBoard = () => {
+        board.clear();
+        switchPlayerTurn();
+    };
+
     printNewRound();
 
     return{
         getBoard,
         playRound,
         getActivePlayer,
+        getScores,
+        getPlayers,
     };
 }
 
 function RenderUI(game) {
+    const results__p1 = document.querySelector(".results__p1");
+    const results__p2 = document.querySelector(".results__p2");
+    const results__ties = document.querySelector(".results__ties");
     const boardElement = document.querySelector(".board");
+    const activePlayerElement = document.querySelector(".game__turn");
 
     const renderBoard = () => {
         // clear board element
@@ -250,6 +281,8 @@ function RenderUI(game) {
 
                 cell.textContent = boardState[row][col] ?? "";
 
+                cell.dataset.mark = cell.textContent;
+
                 cell.dataset.row = row;
                 cell.dataset.col = col;
 
@@ -259,7 +292,9 @@ function RenderUI(game) {
                     const result = game.playRound(event.target.dataset.row, event.target.dataset.col);
                     
                     // rerender the board
+                    renderActivePlayer();
                     renderBoard();
+                    renderScores();
                     
                     switch (result.status) {
                         case "winner":
@@ -286,9 +321,31 @@ function RenderUI(game) {
         }
     }
 
+    const renderActivePlayer = () => {
+        activePlayerElement.innerHTML = " ";
+        const activePlayer = game.getActivePlayer();
 
+        // replace the activePlayerElement with the active player from game object
+        activePlayerElement.innerHTML = `${activePlayer.name}'s turn`;
+    }
+
+    const renderScores = () => {
+        const scores = game.getScores();
+        const players = game.getPlayers();
+
+        results__p1.textContent =
+            `${players[0].name}: ${scores[players[0].name]}`;
+
+        results__p2.textContent =
+            `${players[1].name}: ${scores[players[1].name]}`;
+
+        results__ties.textContent =
+            `Ties: ${scores.ties}`;
+    }
     
     renderBoard();
+    renderActivePlayer();
+    renderScores();
 }
 
 function startGame() {

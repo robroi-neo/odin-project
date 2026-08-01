@@ -29,6 +29,9 @@ body {
   justify-content: center;
   align-items: center;
 
+  padding: 1rem 3rem;
+  gap: 4rem;
+
   background: var(--bg);
   font-family: Inter, system-ui, sans-serif;
   color: var(--text);
@@ -111,6 +114,12 @@ body {
 }
 
 .board__cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  aspect-ratio: 1;
+
   border: none;
   border-radius: 14px;
 
@@ -149,6 +158,9 @@ body {
 /* ---------- SCOREBOARD ---------- */
 
 .results {
+  position: absolute;
+  left: 3rem;
+
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
