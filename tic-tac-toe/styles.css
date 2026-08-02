@@ -54,6 +54,10 @@ body {
     0 6px 12px rgba(0, 0, 0, 0.05);
 }
 
+.game.hidden {
+  display: none;
+}
+
 /* ---------- HEADER ---------- */
 
 .game__header {
@@ -166,6 +170,10 @@ body {
   gap: 1rem;
 }
 
+.results.hidden {
+  display: none;
+}
+
 .results > div {
   padding: 1rem;
 
@@ -205,4 +213,130 @@ body {
 
   font-size: 0.85rem;
   color: var(--text-light);
+}
+/* -------- win modal -----------*/
+.win-modal {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgb(0 0 0 / 60%);
+  z-index: 1000;
+}
+
+.win-modal.hidden {
+  display: none;
+}
+
+.win-modal__content {
+  width: min(90%, 350px);
+
+  padding: 2rem;
+  border-radius: 1rem;
+
+  background: white;
+  text-align: center;
+}
+
+.win-modal__title {
+  margin-bottom: 1rem;
+}
+
+.win-modal__winner {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.win-modal__player {
+  font-weight: bold;
+}
+
+.win-modal__button {
+  width: 100%;
+  padding: 0.8rem;
+
+  border: none;
+  border-radius: 0.5rem;
+
+  cursor: pointer;
+}
+
+/* ----------- main menu -------------- */
+.main-menu {
+  width: min(90vw, 420px);
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  padding: 2.5rem;
+
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.1);
+}
+
+.main-menu.hidden {
+  display: none;
+}
+
+.main-menu__title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.main-menu__players {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.main-menu__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.main-menu__label {
+  font-weight: 600;
+}
+
+.main-menu__input {
+  padding: 0.8rem 1rem;
+
+  border: 2px solid #ddd;
+  border-radius: 0.5rem;
+
+  font-size: 1rem;
+}
+
+.main-menu__input:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+.main-menu__start {
+  padding: 0.9rem;
+
+  border: none;
+  border-radius: 0.5rem;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: transform 0.15s ease;
+}
+
+.main-menu__start:hover {
+  transform: translateY(-2px);
+}
+
+.main-menu__start:active {
+  transform: translateY(0);
 }

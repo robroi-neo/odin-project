@@ -199,9 +199,19 @@ function GameController(
 
     };
 
+    let gameOver = false;
+
     const playRound = (x,y) => {
+        
+        if (gameOver) {
+            return {
+                status: "gameover",
+            };
+        }
+
         const success = board.markCell(x,y, getActivePlayer().mark);
         
+
         if (!success){
             console.log("invalid move, try again");
             return {
@@ -216,6 +226,8 @@ function GameController(
         // check if win
         const winner = board.checkWin();
         if (winner !== null) {
+            gameOver = true;
+
             const winnerPlayer = players.find(player => player.mark === winner);
             scores[winnerPlayer.name]++
             console.log(`${winnerPlayer.name} wins!`);
@@ -226,6 +238,7 @@ function GameController(
         } 
         // check if draw
         if (board.checkDraw()){
+            gameOver = true;
             scores.ties++;
             console.log('its a tie!');
             return {
@@ -243,6 +256,7 @@ function GameController(
     };
 
     const resetBoard = () => {
+        gameOver = false;
         board.clear();
         switchPlayerTurn();
     };
@@ -255,15 +269,43 @@ function GameController(
         getActivePlayer,
         getScores,
         getPlayers,
+        resetBoard,
     };
 }
 
 function RenderUI(game) {
+    const TicTacToe = document.querySelector(".game");
+    const result = document.querySelector(".results");
     const results__p1 = document.querySelector(".results__p1");
     const results__p2 = document.querySelector(".results__p2");
     const results__ties = document.querySelector(".results__ties");
     const boardElement = document.querySelector(".board");
     const activePlayerElement = document.querySelector(".game__turn");
+    const restartBtn = document.querySelector(".game__restart");
+
+    const modal = document.querySelector(".win-modal");
+    const resultText = document.querySelector(".win-modal__winner");
+    const playAgainBtn = document.querySelector(".win-modal__button");
+
+    const showGame = () => {
+        TicTacToe.classList.remove("hidden");
+        result.classList.remove("hidden");
+    }
+
+    const hideGame = () => {
+        TicTacToe.classList.add("hidden");
+        result.classList.add("hidden");
+    }
+
+    const showGameResult = (message) => {
+        resultText.textContent = message;
+        modal.classList.remove("hidden");
+    };
+
+    const hideGameResult = () => {
+        modal.classList.add("hidden");
+    };
+
 
     const renderBoard = () => {
         // clear board element
@@ -300,10 +342,14 @@ function RenderUI(game) {
                         case "winner":
                             // Update turn text
                             // Disable further clicks
+                            boardElement.style.pointerEvents = "none";
+                             showGameResult(`${result.winner.name} wins!`);
                             break;
 
                         case "draw":
                             // Show "It's a draw!"
+                            boardElement.style.pointerEvents = "none";
+                            showGameResult("It's a draw!");
                             break;
 
                         case "invalid":
@@ -342,15 +388,78 @@ function RenderUI(game) {
         results__ties.textContent =
             `Ties: ${scores.ties}`;
     }
+
+    const restartGame = () => {
+        restartBtn.addEventListener("click", resetGameUI);
+        playAgainBtn.addEventListener("click", resetGameUI);
+    }
+
+    const resetGameUI = () => {
+        game.resetBoard();
+        boardElement.style.pointerEvents = "auto";
+
+        hideGameResult();
+        renderBoard();
+        renderActivePlayer();
+        renderScores();
+    }
     
+    restartGame();
     renderBoard();
     renderActivePlayer();
     renderScores();
+
+    return {
+        showGame,
+        hideGame,
+    }
 }
 
-function startGame() {
-    const game = GameController();
-    RenderUI(game);
+function mainMenu() {
+    const menu = document.querySelector(".main-menu");
+    const startBtn = document.querySelector(".main-menu__start");
+    const playerOneInput = document.querySelector("#player-one");
+    const playerTwoInput = document.querySelector("#player-two");
+
+    const show = () => {
+        menu.classList.remove("hidden");
+    };
+
+    const hide = () => {
+        menu.classList.add("hidden");
+    };
+
+    return {
+        show,
+        hide,
+        startBtn,
+        playerOneInput,
+        playerTwoInput,
+    };
+
 }
 
-startGame();
+function startApp() {
+    const menu = mainMenu();
+    
+
+    menu.show();
+
+    
+    menu.startBtn.addEventListener("click", () => {
+        const playerOneName = menu.playerOneInput.value || "Player 1";
+        const playerTwoName = menu.playerTwoInput.value || "Player 2";
+
+        menu.hide();
+
+        const game = GameController(
+            makePlayer(playerOneName, "X"),
+            makePlayer(playerTwoName, "O")
+        );
+
+        const gameUI = RenderUI(game);
+        gameUI.showGame();
+    });
+}
+
+startApp();

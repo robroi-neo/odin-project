@@ -8,7 +8,40 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="results">
+    <div class="main-menu">
+        <h1 class="main-menu__title">TIC-TAC-TOE</h1>
+
+        <div class="main-menu__players">
+            <div class="main-menu__field">
+            <label class="main-menu__label" for="player-one">
+                Player 1 (X)
+            </label>
+            <input
+                id="player-one"
+                class="main-menu__input"
+                type="text"
+                placeholder="Enter Player 1 Name"
+            >
+            </div>
+
+            <div class="main-menu__field">
+            <label class="main-menu__label" for="player-two">
+                Player 2 (O)
+            </label>
+            <input
+                id="player-two"
+                class="main-menu__input"
+                type="text"
+                placeholder="Enter Player 2 Name"
+            >
+            </div>
+        </div>
+
+        <button class="main-menu__start">
+            Start Game
+        </button>
+    </div>
+    <div class="results hidden">
         <div class="results__p1">
 
         </div>
@@ -19,18 +52,30 @@
 
         </div>
     </div>
-    <div class="game">
+    <div class="game hidden">
         <div class="game__header">
             <!-- left side -->
             <h1 class="game__title">TIC-TAC-TOE</h1>
             <!-- middle -->
             <p class="game__turn">X Turn</p>
             <!-- right side -->
-            <button class="game__restart">Restart</button>
+            <button class="game__restart">New Game!</button>
         </div>
 
         <div class="board">
             <!-- CELL for the grid -->
+        </div>
+    </div>
+    <div class="win-modal hidden">
+        <div class="win-modal__content">
+            <h2 class="win-modal__title">Game Over</h2>
+            <p class="win-modal__winner"></p>
+            <button class="win-modal__button">
+            Play Again
+            </button>
+            <button class="win-modal__home">
+                Main Menu
+            </button>
         </div>
     </div>
 </body>
