@@ -403,7 +403,19 @@ function RenderUI(game) {
         renderActivePlayer();
         renderScores();
     }
-    
+
+    // swap in a fresh GameController (e.g. after returning to the main
+    // menu and starting again) without re-attaching any listeners
+    const setGame = (newGame) => {
+        game = newGame;
+        boardElement.style.pointerEvents = "auto";
+
+        hideGameResult();
+        renderBoard();
+        renderActivePlayer();
+        renderScores();
+    }
+
     restartGame();
     renderBoard();
     renderActivePlayer();
@@ -412,6 +424,8 @@ function RenderUI(game) {
     return {
         showGame,
         hideGame,
+        hideGameResult,
+        setGame,
     }
 }
 
@@ -441,11 +455,12 @@ function mainMenu() {
 
 function startApp() {
     const menu = mainMenu();
-    
+    const homeBtn = document.querySelector(".win-modal__home");
 
     menu.show();
 
-    
+    let gameUI = null;
+
     menu.startBtn.addEventListener("click", () => {
         const playerOneName = menu.playerOneInput.value || "Player 1";
         const playerTwoName = menu.playerTwoInput.value || "Player 2";
@@ -457,8 +472,21 @@ function startApp() {
             makePlayer(playerTwoName, "O")
         );
 
-        const gameUI = RenderUI(game);
+        // reuse the same RenderUI instance across games so restart/play-again
+        // listeners never get attached more than once
+        if (!gameUI) {
+            gameUI = RenderUI(game);
+        } else {
+            gameUI.setGame(game);
+        }
+
         gameUI.showGame();
+    });
+
+    homeBtn.addEventListener("click", () => {
+        gameUI.hideGame();
+        gameUI.hideGameResult();
+        menu.show();
     });
 }
 
