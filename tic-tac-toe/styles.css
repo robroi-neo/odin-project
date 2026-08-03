@@ -45,7 +45,6 @@ body {
 
 .game,
 .main-menu,
-.results > div,
 .win-modal__content {
   border: 4px solid var(--border);
   box-shadow: 6px 6px 0 0 var(--border);
@@ -182,12 +181,11 @@ body {
 /* ---------- SCOREBOARD ---------- */
 
 .results {
-  width: min(90vw, 420px);
-  order: -1;
-
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
+
+  padding-top: 1.25rem;
+  border-top: 3px solid var(--border);
 }
 
 .results.hidden {
@@ -196,16 +194,19 @@ body {
 
 .results > div {
   min-width: 0;
-  padding: 0.75rem 0.4rem;
+  padding: 0 0.5rem;
 
   text-align: center;
 
-  background: var(--surface);
-  border-radius: var(--radius);
+  font-family: var(--font-retro);
+  font-size: 1.2rem;
+  color: var(--ink);
+
+  overflow-wrap: break-word;
 }
 
-.results > div > * {
-  overflow-wrap: break-word;
+.results > div + div {
+  border-left: 3px solid var(--border);
 }
 
 .results__p1::before,
@@ -216,7 +217,7 @@ body {
   margin-bottom: 0.4rem;
 
   font-family: var(--font-pixel);
-  font-size: 0.55rem;
+  font-size: 0.5rem;
   color: var(--ink-soft);
 }
 
@@ -241,25 +242,14 @@ body {
     gap: 1.5rem;
   }
 
-  .results {
-    gap: 0.5rem;
-  }
-
   .results > div {
-    padding: 0.6rem 0.25rem;
-    box-shadow: 4px 4px 0 0 var(--border);
+    font-size: 0.95rem;
   }
 
   .results__p1::before,
   .results__ties::before,
   .results__p2::before {
-    font-size: 0.45rem;
-  }
-
-  .results__p1,
-  .results__p2,
-  .results__ties {
-    font-size: 0.9rem;
+    font-size: 0.4rem;
   }
 }
 
